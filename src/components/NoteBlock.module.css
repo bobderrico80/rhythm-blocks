@@ -1,0 +1,43 @@
+.note {
+  box-sizing: border-box;
+  border: 5px solid black;
+  border-radius: 5px;
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.note > img {
+  height: 80%;
+  width: auto;
+}
+
+.whole-note {
+  width: 32rem;
+  background-color: #f17e7e;
+}
+
+.whole-note > img {
+  height: 40%;
+  margin-left: 2rem;
+}
+
+.half-note {
+  width: 16rem;
+  background-color: #7e8af1;
+}
+
+.quarter-note {
+  width: 8rem;
+  background-color: #8dc063;
+}
+
+.quaver {
+  width: 8rem;
+  background-color: #f0ee8c;
+}
+
+.quarter-note-rest {
+  width: 8rem;
+}
