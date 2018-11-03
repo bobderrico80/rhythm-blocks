@@ -1,15 +1,16 @@
 import React from 'react';
 import NoteBlock from './NoteBlock';
 import styles from './NotePalette.module.css';
+import createNotes from '../lib/createNotes';
 
-console.log('styles', typeof styles, styles);
+const NotePalette = ({ paletteNoteCodes }) => {
+  const notes = createNotes(...paletteNoteCodes);
 
-const NotePalette = ({ paletteNotes }) => {
   return (
     <div className={styles.notePalette}>
-      {paletteNotes.map(noteCode => (
-        <NoteBlock key={noteCode} noteCode={noteCode} />
-      ))}
+      {notes.map(note => {
+        return <NoteBlock className={styles.notePaletteNote} key={note.id} {...note} />;
+      })}
     </div>
   );
 };

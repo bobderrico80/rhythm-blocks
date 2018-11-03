@@ -1,0 +1,6 @@
+.measure {
+  height: 8rem;
+  width: 32rem;
+  border: 1px solid gray;
+  display: flex;
+}

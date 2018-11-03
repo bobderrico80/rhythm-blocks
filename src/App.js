@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Measure from './components/Measure';
 import NotePalette from './components/NotePalette';
 import styles from './App.module.css';
 
@@ -7,15 +8,18 @@ class App extends Component {
     super(props);
 
     this.state = {
-      paletteNotes: ['w', 'h', 'q', 'ee', 'qr'],
+      paletteNoteCodes: ['w', 'h', 'q', 'ee', 'qr'],
     };
   }
+
   render() {
     return (
       <div className={styles.app}>
-        <section>Canvas</section>
+        <section className={styles.canvas}>
+          <Measure beatsPerMeasure={4} />
+        </section>
         <section className={styles.palette}>
-          <NotePalette className={styles.palette} paletteNotes={this.state.paletteNotes} />
+          <NotePalette className={styles.palette} paletteNoteCodes={this.state.paletteNoteCodes} />
         </section>
       </div>
     );
