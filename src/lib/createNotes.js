@@ -43,13 +43,7 @@ const noteCodeMap = {
 };
 
 const lookupNote = noteCode => {
-  const note = noteCodeMap[noteCode];
-
-  if (!note) {
-    throw new Error(`Note code '${noteCode}' is not found in the noteCodeMap`);
-  }
-
-  return note;
+  return noteCodeMap[noteCode];
 };
 
 const createNotes = (...noteCodes) => {

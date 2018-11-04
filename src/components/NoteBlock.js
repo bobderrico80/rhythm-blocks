@@ -9,18 +9,28 @@ class NoteBlock extends React.Component {
     this.onDragStart = this.onDragStart.bind(this);
   }
 
-  onDragStart(noteCode, event) {
-    event.dataTransfer.setData('text/plain', noteCode);
+  onDragStart(event) {
+    const noteDragAction = {
+      type: this.props.noteDropActionType,
+      payload: {
+        noteCode: this.props.id,
+        index: this.props.index,
+        measureIndex: this.props.measureIndex,
+      },
+    };
+    console.log('noteDragAction', typeof noteDragAction, noteDragAction);
+
+    event.dataTransfer.setData('text/plain', JSON.stringify(noteDragAction));
   }
 
   render() {
-    const { className, css, svg, alt, id } = this.props;
+    const { className, css, svg, alt } = this.props;
 
     return (
       <div
         className={`${styles.note} ${styles[css]} ${className}`}
         draggable
-        onDragStart={event => this.onDragStart(id, event)}
+        onDragStart={this.onDragStart}
       >
         <img src={svg} alt={alt} />
       </div>
