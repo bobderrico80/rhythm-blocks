@@ -11,12 +11,6 @@ class App extends Component {
       paletteNoteCodes: ['w', 'h', 'q', 'ee', 'qr'],
       measures: [[]],
     };
-
-    this.onUpdateMeasures = this.onUpdateMeasures.bind(this);
-  }
-
-  onUpdateMeasures(updateFunction) {
-    this.setState(({ measures }) => ({ measures: updateFunction(measures) }));
   }
 
   render() {
@@ -24,13 +18,7 @@ class App extends Component {
       <div className={styles.app}>
         <section className={styles.canvas}>
           {this.state.measures.map((notes, index) => (
-            <Measure
-              key={index}
-              index={index}
-              beatsPerMeasure={4}
-              notes={notes}
-              onUpdate={this.onUpdateMeasures}
-            />
+            <Measure key={index} index={index} beatsPerMeasure={4} notes={notes} />
           ))}
         </section>
         <section className={styles.palette}>
