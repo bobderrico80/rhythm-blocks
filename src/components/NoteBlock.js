@@ -7,8 +7,13 @@ import styles from './NoteBlock.module.css';
 
 const propTypes = {
   className: PropTypes.string,
+  isPaletteNote: PropTypes.bool,
   connectDragSource: PropTypes.func.isRequired,
   ...note,
+};
+
+const defaultProps = {
+  isPaletteNote: false,
 };
 
 class NoteBlock extends React.Component {
@@ -30,11 +35,13 @@ class NoteBlock extends React.Component {
 }
 
 NoteBlock.propTypes = propTypes;
+NoteBlock.defaultProps = defaultProps;
 
 const dragSpec = {
   beginDrag: (props, monitor, component) => {
     return {
       noteId: props.id,
+      noteType: props.type,
     };
   },
 };
@@ -45,4 +52,8 @@ const dragCollect = (connect, monitor) => {
   };
 };
 
-export default DragSource(dropTypes.NOTE_BLOCK, dragSpec, dragCollect)(NoteBlock);
+export default DragSource(
+  ({ isPaletteNote }) => (isPaletteNote ? dropTypes.PALETTE_NOTE_BLOCK : dropTypes.NOTE_BLOCK),
+  dragSpec,
+  dragCollect,
+)(NoteBlock);

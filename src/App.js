@@ -3,7 +3,8 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import Measure from './components/Measure';
 import NotePalette from './components/NotePalette';
-import { noteIds } from './lib/constants';
+import createNotes from './lib/createNotes';
+import { noteTypes, dropTypes } from './lib/constants';
 import styles from './App.module.css';
 
 class App extends Component {
@@ -11,46 +12,73 @@ class App extends Component {
     super(props);
 
     this.state = {
-      paletteNoteIds: [
-        noteIds.WHOLE_NOTE,
-        noteIds.HALF_NOTE,
-        noteIds.QUARTER_NOTE,
-        noteIds.DOUBLE_8TH_NOTES,
-        noteIds.QUARTER_NOTE_REST,
+      paletteNotes: createNotes(
+        [
+          noteTypes.WHOLE_NOTE,
+          noteTypes.HALF_NOTE,
+          noteTypes.QUARTER_NOTE,
+          noteTypes.DOUBLE_8TH_NOTES,
+          noteTypes.QUARTER_NOTE_REST,
+        ],
+        note => `palette-${note.type.description}`,
+      ),
+      measures: [
+        {
+          totalDuration: 0,
+          notes: [],
+        },
       ],
-      measures: [[]],
     };
 
-    this.onAddNote = this.onAddNote.bind(this);
+    this.onMeasureDropNote = this.onMeasureDropNote.bind(this);
   }
 
-  onAddNote(measureIndex, noteId) {
-    console.log(measureIndex, noteId);
-    this.setState(({ measures }) => {
-      const nextMeasure = [...measures[measureIndex], noteId];
-      const nextMeasures = [...measures];
-      nextMeasures[measureIndex] = nextMeasure;
+  static calculateTotalDuration(measureNotes) {
+    return measureNotes.reduce((totalDuration, note) => (totalDuration += note.duration), 0);
+  }
 
-      return { measures: nextMeasures };
+  addNoteToMeasure(measureIndex, noteType) {
+    const newNote = createNotes(noteType);
+
+    this.setState(({ measures }) => {
+      const updatedMeasures = [...measures];
+      const updatedMeasureNotes = [...measures[measureIndex].notes, ...newNote];
+      const updatedMeasure = {
+        notes: updatedMeasureNotes,
+        totalDuration: App.calculateTotalDuration(updatedMeasureNotes),
+      };
+
+      updatedMeasures[measureIndex] = updatedMeasure;
+
+      return { measures: updatedMeasures };
     });
+  }
+
+  onMeasureDropNote({ measureIndex, dropType, noteId, noteType }) {
+    if (dropType === dropTypes.PALETTE_NOTE_BLOCK) {
+      this.addNoteToMeasure(measureIndex, noteType);
+    }
+
+    // TODO: handle moving notes
   }
 
   render() {
     return (
       <div className={styles.app}>
         <section className={styles.canvas}>
-          {this.state.measures.map((noteIds, index) => (
+          {this.state.measures.map(({ notes, totalDuration }, index) => (
             <Measure
               key={index}
               index={index}
               beatsPerMeasure={4}
-              noteIds={noteIds}
-              onAddNote={this.onAddNote}
+              totalDuration={totalDuration}
+              notes={notes}
+              onDropNote={this.onMeasureDropNote}
             />
           ))}
         </section>
         <section className={styles.palette}>
-          <NotePalette className={styles.palette} paletteNoteIds={this.state.paletteNoteIds} />
+          <NotePalette className={styles.palette} paletteNotes={this.state.paletteNotes} />
         </section>
       </div>
     );

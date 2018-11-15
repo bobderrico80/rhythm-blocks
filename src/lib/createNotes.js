@@ -1,11 +1,16 @@
-import notes from './notes';
+import { noteMap } from './notes';
+import uuid from 'uuid/v4';
 
-const lookupNote = noteId => {
-  return notes[noteId];
+const lookupNote = noteType => {
+  return noteMap[noteType];
 };
 
-const createNotes = (...noteIds) => {
-  return noteIds.map(noteId => lookupNote(noteId));
+const createNotes = (noteTypes, noteIdFunction = () => uuid()) => {
+  return [].concat(noteTypes).map(type => {
+    const note = lookupNote(type);
+    const id = noteIdFunction(note);
+    return { id, ...note };
+  });
 };
 
 export default createNotes;
