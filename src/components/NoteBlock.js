@@ -20,23 +20,13 @@ const defaultProps = {
   onNoteRemove: null,
 };
 
-class NoteBlock extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
-
-  render() {
-    const { className, css, svg, alt, connectDragSource } = this.props;
-
-    return connectDragSource(
-      <div className={`${styles.note} ${styles[css]} ${className}`}>
-        <img src={svg} alt={alt} />
-      </div>,
-    );
-  }
-}
+const NoteBlock = ({ className, css, svg, alt, connectDragSource }) => {
+  return connectDragSource(
+    <div className={`${styles.note} ${styles[css]} ${className}`}>
+      <img src={svg} alt={alt} />
+    </div>,
+  );
+};
 
 NoteBlock.propTypes = propTypes;
 NoteBlock.defaultProps = defaultProps;

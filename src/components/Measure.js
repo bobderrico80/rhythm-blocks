@@ -21,25 +21,21 @@ const defaultProps = {
   totalDuration: 0,
 };
 
-class Measure extends React.Component {
-  render() {
-    const { connectDropTarget } = this.props;
-
-    return connectDropTarget(
-      <div className={styles.measure}>
-        {this.props.notes.map((note, index) => (
-          <NoteBlock
-            key={note.id}
-            index={index}
-            measureIndex={this.props.index}
-            {...note}
-            onNoteRemove={this.props.onNoteRemove}
-          />
-        ))}
-      </div>,
-    );
-  }
-}
+const Measure = ({ index, notes, connectDropTarget, onNoteRemove }) => {
+  return connectDropTarget(
+    <div className={styles.measure}>
+      {notes.map((note, noteIndex) => (
+        <NoteBlock
+          key={note.id}
+          index={noteIndex}
+          measureIndex={index}
+          onNoteRemove={onNoteRemove}
+          {...note}
+        />
+      ))}
+    </div>,
+  );
+};
 
 Measure.propTypes = propTypes;
 Measure.defaultProps = defaultProps;

@@ -5,7 +5,6 @@ import styles from './NotePalette.module.css';
 import { note } from '../lib/commonPropTypes';
 
 const propTypes = {
-  className: PropTypes.string,
   paletteNotes: PropTypes.arrayOf(PropTypes.shape(note)).isRequired,
 };
 
@@ -13,24 +12,22 @@ const defaultProps = {
   className: '',
 };
 
-class NotePalette extends React.Component {
-  render() {
-    return (
-      <div className={styles.notePalette}>
-        {this.props.paletteNotes.map(note => {
-          return (
-            <NoteBlock
-              className={styles.notePaletteNote}
-              key={note.id}
-              {...note}
-              isPaletteNote={true}
-            />
-          );
-        })}
-      </div>
-    );
-  }
-}
+const NotePalette = ({ paletteNotes }) => {
+  return (
+    <div className={styles.notePalette}>
+      {paletteNotes.map(note => {
+        return (
+          <NoteBlock
+            className={styles.notePaletteNote}
+            key={note.id}
+            {...note}
+            isPaletteNote={true}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
 NotePalette.propTypes = propTypes;
 NotePalette.defaultProps = defaultProps;
