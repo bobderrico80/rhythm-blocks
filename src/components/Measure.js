@@ -13,6 +13,7 @@ const propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape(note)),
   connectDropTarget: PropTypes.func.isRequired,
   onDropNote: PropTypes.func.isRequired,
+  onNoteRemove: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -27,7 +28,13 @@ class Measure extends React.Component {
     return connectDropTarget(
       <div className={styles.measure}>
         {this.props.notes.map((note, index) => (
-          <NoteBlock key={note.id} index={index} measureIndex={this.props.index} {...note} />
+          <NoteBlock
+            key={note.id}
+            index={index}
+            measureIndex={this.props.index}
+            {...note}
+            onNoteRemove={this.props.onNoteRemove}
+          />
         ))}
       </div>,
     );
@@ -39,17 +46,18 @@ Measure.defaultProps = defaultProps;
 
 const dropSpec = {
   drop: ({ index, onDropNote, totalDuration, beatsPerMeasure }, monitor, component) => {
-    // Cancel drop if measure is full
-    if (totalDuration === beatsPerMeasure) {
+    const { noteId, noteType, noteDuration } = monitor.getItem();
+
+    // Cancel drop if measure is full or will be full
+    if (totalDuration === beatsPerMeasure || totalDuration + noteDuration > beatsPerMeasure) {
       return;
     }
 
-    const { noteId, noteType } = monitor.getItem();
     onDropNote({ measureIndex: index, dropType: monitor.getItemType(), noteId, noteType });
   },
 };
 
-const dropCollect = (connect, monitor) => {
+const dropCollect = connect => {
   return {
     connectDropTarget: connect.dropTarget(),
   };

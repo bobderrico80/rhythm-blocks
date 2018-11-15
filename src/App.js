@@ -31,6 +31,7 @@ class App extends Component {
     };
 
     this.onMeasureDropNote = this.onMeasureDropNote.bind(this);
+    this.onNoteRemove = this.onNoteRemove.bind(this);
   }
 
   static calculateTotalDuration(measureNotes) {
@@ -59,7 +60,25 @@ class App extends Component {
       this.addNoteToMeasure(measureIndex, noteType);
     }
 
-    // TODO: handle moving notes
+    // TODO: handle moving notes to other measures
+  }
+
+  onNoteRemove(measureIndex, noteId) {
+    this.setState(({ measures }) => {
+      const updatedMeasures = [...measures];
+      const updatedMeasureNotes = updatedMeasures[measureIndex].notes.filter(
+        note => note.id !== noteId,
+      );
+
+      const updatedMeasure = {
+        notes: updatedMeasureNotes,
+        totalDuration: App.calculateTotalDuration(updatedMeasureNotes),
+      };
+
+      updatedMeasures[measureIndex] = updatedMeasure;
+
+      return { measures: updatedMeasures };
+    });
   }
 
   render() {
@@ -74,6 +93,7 @@ class App extends Component {
               totalDuration={totalDuration}
               notes={notes}
               onDropNote={this.onMeasureDropNote}
+              onNoteRemove={this.onNoteRemove}
             />
           ))}
         </section>

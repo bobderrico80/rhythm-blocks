@@ -9,11 +9,15 @@ const propTypes = {
   className: PropTypes.string,
   isPaletteNote: PropTypes.bool,
   connectDragSource: PropTypes.func.isRequired,
+  measureIndex: PropTypes.number,
+  onNoteRemove: PropTypes.func,
   ...note,
 };
 
 const defaultProps = {
   isPaletteNote: false,
+  measureIndex: null,
+  onNoteRemove: null,
 };
 
 class NoteBlock extends React.Component {
@@ -38,15 +42,22 @@ NoteBlock.propTypes = propTypes;
 NoteBlock.defaultProps = defaultProps;
 
 const dragSpec = {
-  beginDrag: (props, monitor, component) => {
+  beginDrag: props => {
     return {
       noteId: props.id,
       noteType: props.type,
+      noteDuration: props.duration,
     };
+  },
+
+  endDrag: ({ isPaletteNote, measureIndex, id, onNoteRemove }, monitor) => {
+    if (onNoteRemove && !monitor.didDrop() && !isPaletteNote) {
+      onNoteRemove(measureIndex, id);
+    }
   },
 };
 
-const dragCollect = (connect, monitor) => {
+const dragCollect = connect => {
   return {
     connectDragSource: connect.dragSource(),
   };
