@@ -5,8 +5,11 @@ import Measure from './components/Measure';
 import NotePalette from './components/NotePalette';
 import createMeasures from './lib/createMeasures';
 import createNotes from './lib/createNotes';
-import { noteTypes, dropTypes } from './lib/constants';
+import { noteTypes } from './lib/constants';
 import styles from './App.module.css';
+
+const BEATS_PER_MEASURE = 4;
+const MAX_MEASURES = 4;
 
 class App extends Component {
   constructor(props) {
@@ -23,11 +26,13 @@ class App extends Component {
         ],
         note => `palette-${note.type.description}`,
       ),
-      measures: createMeasures(4, 4, 4, 4),
+      measures: createMeasures(BEATS_PER_MEASURE),
     };
 
     this.onMeasureDropNote = this.onMeasureDropNote.bind(this);
     this.onNoteRemove = this.onNoteRemove.bind(this);
+    this.onMeasureAdd = this.onMeasureAdd.bind(this);
+    this.onMeasureRemove = this.onMeasureRemove.bind(this);
   }
 
   static calculateTotalDuration(measureNotes) {
@@ -69,6 +74,18 @@ class App extends Component {
     this.removeNoteFromMeasure(measureIndex, noteId);
   }
 
+  onMeasureAdd() {
+    this.setState(({ measures }) => ({
+      measures: measures.concat(createMeasures(BEATS_PER_MEASURE)),
+    }));
+  }
+
+  onMeasureRemove(measureIndex) {
+    this.setState(({ measures }) => ({
+      measures: [...measures.slice(0, measureIndex), ...measures.slice(measureIndex + 1)],
+    }));
+  }
+
   render() {
     return (
       <div className={styles.app}>
@@ -80,8 +97,15 @@ class App extends Component {
               beatsPerMeasure={beatsPerMeasure}
               totalDuration={totalDuration}
               notes={notes}
+              showAddButton={
+                this.state.measures.length < MAX_MEASURES &&
+                index === this.state.measures.length - 1
+              }
+              showRemoveButton={this.state.measures.length > 1}
               onDropNote={this.onMeasureDropNote}
               onNoteRemove={this.onNoteRemove}
+              onMeasureAdd={this.onMeasureAdd}
+              onMeasureRemove={this.onMeasureRemove}
             />
           ))}
         </section>

@@ -12,27 +12,54 @@ const propTypes = {
   totalDuration: PropTypes.number.isRequired,
   notes: PropTypes.arrayOf(PropTypes.shape(note)),
   connectDropTarget: PropTypes.func.isRequired,
+  showAddButton: PropTypes.bool,
+  showRemoveButton: PropTypes.bool,
   onDropNote: PropTypes.func.isRequired,
   onNoteRemove: PropTypes.func.isRequired,
+  onMeasureAdd: PropTypes.func.isRequired,
+  onMeasureRemove: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
   notes: [],
   totalDuration: 0,
+  showAddButton: false,
+  showRemoveButton: false,
 };
 
-const Measure = ({ index, notes, connectDropTarget, onNoteRemove }) => {
+const Measure = ({
+  index,
+  notes,
+  connectDropTarget,
+  showAddButton,
+  showRemoveButton,
+  onNoteRemove,
+  onMeasureAdd,
+  onMeasureRemove,
+}) => {
   return connectDropTarget(
-    <div className={styles.measure}>
-      {notes.map((note, noteIndex) => (
-        <NoteBlock
-          key={note.id}
-          index={noteIndex}
-          measureIndex={index}
-          onNoteRemove={onNoteRemove}
-          {...note}
-        />
-      ))}
+    <div className={styles.measureWrap}>
+      <div className={styles.measure}>
+        {notes.map((note, noteIndex) => (
+          <NoteBlock
+            key={note.id}
+            index={noteIndex}
+            measureIndex={index}
+            onNoteRemove={onNoteRemove}
+            {...note}
+          />
+        ))}
+      </div>
+      {showAddButton ? (
+        <button className={styles.addButton} onClick={onMeasureAdd}>
+          Add Measure
+        </button>
+      ) : null}
+      {showRemoveButton ? (
+        <button className={styles.removeButton} onClick={() => onMeasureRemove(index)}>
+          Remove Measure
+        </button>
+      ) : null}
     </div>,
   );
 };
