@@ -1,6 +1,48 @@
+.measureWrap {
+  height: 10rem;
+  display: grid;
+  grid-template-rows: 1fr 3rem 1fr 2rem;
+  grid-template-columns: 1fr 2rem 3rem;
+}
+
 .measure {
   height: 8rem;
   width: 32rem;
-  border: 1px solid gray;
+  border: 2px solid gray;
+  border-radius: 10px;
   display: flex;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.removeButton {
+  grid-row-start: 4;
+  grid-row-end: 4;
+  grid-column-start: 2;
+  grid-column-end: 2;
+  background: none;
+  border: none;
+}
+
+.removeButtonIcon {
+  height: 2rem;
+  width: 2rem;
+}
+
+.addButton {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin-left: 1rem;
+}
+
+.addButtonIcon {
+  height: 3rem;
+  width: 3rem;
 }

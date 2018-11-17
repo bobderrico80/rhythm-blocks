@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import NoteBlock from './NoteBlock';
-import styles from './Measure.module.css';
 import { note } from '../lib/commonPropTypes';
 import { dropTypes } from '../lib/constants';
+import plus from '../assets/svg/plus.svg';
+import close from '../assets/svg/close.svg';
+import styles from './Measure.module.css';
 
 const propTypes = {
   index: PropTypes.number.isRequired,
@@ -50,14 +52,14 @@ const Measure = ({
           />
         ))}
       </div>
-      {showAddButton ? (
-        <button className={styles.addButton} onClick={onMeasureAdd}>
-          Add Measure
-        </button>
-      ) : null}
       {showRemoveButton ? (
         <button className={styles.removeButton} onClick={() => onMeasureRemove(index)}>
-          Remove Measure
+          <img className={styles.removeButtonIcon} src={close} alt="Remove Measure" />
+        </button>
+      ) : null}
+      {showAddButton ? (
+        <button className={styles.addButton} onClick={onMeasureAdd}>
+          <img className={styles.addButtonIcon} src={plus} alt="Add Measure" />
         </button>
       ) : null}
     </div>,
