@@ -41,15 +41,18 @@ Measure.propTypes = propTypes;
 Measure.defaultProps = defaultProps;
 
 const dropSpec = {
-  drop: ({ index, onDropNote, totalDuration, beatsPerMeasure }, monitor, component) => {
-    const { noteId, noteType, noteDuration } = monitor.getItem();
+  drop: ({ index, onDropNote, totalDuration, beatsPerMeasure }, monitor) => {
+    const { noteType, noteDuration } = monitor.getItem();
 
     // Cancel drop if measure is full or will be full
     if (totalDuration === beatsPerMeasure || totalDuration + noteDuration > beatsPerMeasure) {
       return;
     }
 
-    onDropNote({ measureIndex: index, dropType: monitor.getItemType(), noteId, noteType });
+    onDropNote({
+      measureIndex: index,
+      noteType,
+    });
   },
 };
 

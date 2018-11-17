@@ -34,14 +34,13 @@ NoteBlock.defaultProps = defaultProps;
 const dragSpec = {
   beginDrag: props => {
     return {
-      noteId: props.id,
       noteType: props.type,
       noteDuration: props.duration,
     };
   },
 
   endDrag: ({ isPaletteNote, measureIndex, id, onNoteRemove }, monitor) => {
-    if (onNoteRemove && !monitor.didDrop() && !isPaletteNote) {
+    if (onNoteRemove && !isPaletteNote) {
       onNoteRemove(measureIndex, id);
     }
   },
