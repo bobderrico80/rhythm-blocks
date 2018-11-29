@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import { noteTypes } from './constants';
+import { noteBlockTypes } from './constants';
 
-export const note = {
-  type: PropTypes.oneOf(Object.values(noteTypes)).isRequired,
+export const noteBlock = {
+  type: PropTypes.oneOf(Object.values(noteBlockTypes)).isRequired,
   id: PropTypes.string.isRequired,
   svg: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,

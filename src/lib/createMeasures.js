@@ -1,7 +1,7 @@
 const createMeasures = (...beatsPerMeasures) => {
   return beatsPerMeasures.map(beatsPerMeasure => ({
     totalDuration: 0,
-    notes: [],
+    noteBlocks: [],
     beatsPerMeasure,
   }));
 };

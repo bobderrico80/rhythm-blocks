@@ -3,7 +3,7 @@ export const dropTypes = {
   PALETTE_NOTE_BLOCK: Symbol('PALETTE_NOTE_BLOCK'),
 };
 
-export const noteTypes = {
+export const noteBlockTypes = {
   WHOLE_NOTE: Symbol('WHOLE_NOTE'),
   HALF_NOTE: Symbol('HALF_NOTE'),
   QUARTER_NOTE: Symbol('QUARTER_NOTE'),

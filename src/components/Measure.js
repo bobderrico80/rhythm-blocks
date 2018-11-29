@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import NoteBlock from './NoteBlock';
-import { note } from '../lib/commonPropTypes';
+import { noteBlock } from '../lib/commonPropTypes';
 import { dropTypes } from '../lib/constants';
 import plus from '../assets/svg/plus.svg';
 import close from '../assets/svg/close.svg';
@@ -12,12 +12,12 @@ const propTypes = {
   index: PropTypes.number.isRequired,
   beatsPerMeasure: PropTypes.number.isRequired,
   totalDuration: PropTypes.number.isRequired,
-  notes: PropTypes.arrayOf(PropTypes.shape(note)),
+  noteBlocks: PropTypes.arrayOf(PropTypes.shape(noteBlock)),
   connectDropTarget: PropTypes.func.isRequired,
   showAddButton: PropTypes.bool,
   showRemoveButton: PropTypes.bool,
-  onDropNote: PropTypes.func.isRequired,
-  onNoteRemove: PropTypes.func.isRequired,
+  onDropNoteBlock: PropTypes.func.isRequired,
+  onNoteBlockRemove: PropTypes.func.isRequired,
   onMeasureAdd: PropTypes.func.isRequired,
   onMeasureRemove: PropTypes.func.isRequired,
 };
@@ -31,24 +31,24 @@ const defaultProps = {
 
 const Measure = ({
   index,
-  notes,
+  noteBlocks,
   connectDropTarget,
   showAddButton,
   showRemoveButton,
-  onNoteRemove,
+  onNoteBlockRemove,
   onMeasureAdd,
   onMeasureRemove,
 }) => {
   return connectDropTarget(
     <div className={styles.measureWrap}>
       <div className={styles.measure}>
-        {notes.map((note, noteIndex) => (
+        {noteBlocks.map((noteBlock, noteIndex) => (
           <NoteBlock
-            key={note.id}
+            key={noteBlock.id}
             index={noteIndex}
             measureIndex={index}
-            onNoteRemove={onNoteRemove}
-            {...note}
+            onNoteBlockRemove={onNoteBlockRemove}
+            {...noteBlock}
           />
         ))}
       </div>
@@ -70,17 +70,17 @@ Measure.propTypes = propTypes;
 Measure.defaultProps = defaultProps;
 
 const dropSpec = {
-  drop: ({ index, onDropNote, totalDuration, beatsPerMeasure }, monitor) => {
-    const { noteType, noteDuration } = monitor.getItem();
+  drop: ({ index, onDropNoteBlock, totalDuration, beatsPerMeasure }, monitor) => {
+    const { noteBlockType, noteBlockDuration } = monitor.getItem();
 
     // Cancel drop if measure is full or will be full
-    if (totalDuration === beatsPerMeasure || totalDuration + noteDuration > beatsPerMeasure) {
+    if (totalDuration === beatsPerMeasure || totalDuration + noteBlockDuration > beatsPerMeasure) {
       return;
     }
 
-    onDropNote({
+    onDropNoteBlock({
       measureIndex: index,
-      noteType,
+      noteBlockType,
     });
   },
 };

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import Measure from './components/Measure';
-import NotePalette from './components/NotePalette';
+import NoteBlockPalette from './components/NoteBlockPalette';
+import Player from './components/Player';
 import createMeasures from './lib/createMeasures';
-import createNotes from './lib/createNotes';
-import { noteTypes } from './lib/constants';
+import createNoteBlocks from './lib/createNoteBlocks';
+import { noteBlockTypes } from './lib/constants';
 import styles from './App.module.css';
 
 const BEATS_PER_MEASURE = 4;
@@ -16,62 +17,69 @@ class App extends Component {
     super(props);
 
     this.state = {
-      paletteNotes: createNotes(
+      paletteNoteBlocks: createNoteBlocks(
         [
-          noteTypes.WHOLE_NOTE,
-          noteTypes.HALF_NOTE,
-          noteTypes.QUARTER_NOTE,
-          noteTypes.DOUBLE_8TH_NOTES,
-          noteTypes.QUARTER_NOTE_REST,
+          noteBlockTypes.WHOLE_NOTE,
+          noteBlockTypes.HALF_NOTE,
+          noteBlockTypes.QUARTER_NOTE,
+          noteBlockTypes.DOUBLE_8TH_NOTES,
+          noteBlockTypes.QUARTER_NOTE_REST,
         ],
-        note => `palette-${note.type.description}`,
+        noteBlock => `palette-${noteBlock.type.description}`,
       ),
       measures: createMeasures(BEATS_PER_MEASURE),
     };
 
-    this.onMeasureDropNote = this.onMeasureDropNote.bind(this);
-    this.onNoteRemove = this.onNoteRemove.bind(this);
+    this.onMeasureDropNoteBlock = this.onMeasureDropNoteBlock.bind(this);
+    this.onNoteBlockRemove = this.onNoteBlockRemove.bind(this);
     this.onMeasureAdd = this.onMeasureAdd.bind(this);
     this.onMeasureRemove = this.onMeasureRemove.bind(this);
   }
 
-  static calculateTotalDuration(measureNotes) {
-    return measureNotes.reduce((totalDuration, note) => (totalDuration += note.duration), 0);
+  static calculateTotalDuration(measureNoteBlocks) {
+    return measureNoteBlocks.reduce(
+      (totalDuration, noteBlock) => (totalDuration += noteBlock.duration),
+      0,
+    );
   }
 
-  updateMeasure(measureIndex, updateMeasureNoteFunction) {
+  updateMeasure(measureIndex, updateMeasureNoteBlockFunction) {
     this.setState(({ measures }) => {
       const previousMeasure = measures[measureIndex];
       const updatedMeasures = [...measures];
-      const updatedMeasureNotes = updateMeasureNoteFunction(previousMeasure.notes);
+      const updatedMeasureNoteBlocks = updateMeasureNoteBlockFunction(previousMeasure.noteBlocks);
 
       updatedMeasures[measureIndex] = {
         ...previousMeasure,
-        notes: updatedMeasureNotes,
-        totalDuration: App.calculateTotalDuration(updatedMeasureNotes),
+        noteBlocks: updatedMeasureNoteBlocks,
+        totalDuration: App.calculateTotalDuration(updatedMeasureNoteBlocks),
       };
 
       return { measures: updatedMeasures };
     });
   }
 
-  addNoteToMeasure(measureIndex, noteType) {
-    const newNote = createNotes(noteType);
-    this.updateMeasure(measureIndex, previousMeasureNotes => [...previousMeasureNotes, ...newNote]);
+  addNoteBlockToMeasure(measureIndex, noteBlockType) {
+    const newNoteBlock = createNoteBlocks(noteBlockType);
+
+    this.updateMeasure(measureIndex, previousMeasureNoteBlocks => [
+      ...previousMeasureNoteBlocks,
+      ...newNoteBlock,
+    ]);
   }
 
-  removeNoteFromMeasure(measureIndex, noteId) {
-    this.updateMeasure(measureIndex, previousMeasureNotes =>
-      previousMeasureNotes.filter(note => note.id !== noteId),
+  removeNoteBlockFromMeasure(measureIndex, noteBlockId) {
+    this.updateMeasure(measureIndex, previousMeasureNoteBlocks =>
+      previousMeasureNoteBlocks.filter(noteBlock => noteBlock.id !== noteBlockId),
     );
   }
 
-  onMeasureDropNote({ measureIndex, noteType }) {
-    this.addNoteToMeasure(measureIndex, noteType);
+  onMeasureDropNoteBlock({ measureIndex, noteBlockType }) {
+    this.addNoteBlockToMeasure(measureIndex, noteBlockType);
   }
 
-  onNoteRemove(measureIndex, noteId) {
-    this.removeNoteFromMeasure(measureIndex, noteId);
+  onNoteBlockRemove(measureIndex, noteBlockId) {
+    this.removeNoteBlockFromMeasure(measureIndex, noteBlockId);
   }
 
   onMeasureAdd() {
@@ -90,27 +98,30 @@ class App extends Component {
     return (
       <div className={styles.app}>
         <section className={styles.canvas}>
-          {this.state.measures.map(({ notes, totalDuration, beatsPerMeasure }, index) => (
+          {this.state.measures.map(({ noteBlocks, totalDuration, beatsPerMeasure }, index) => (
             <Measure
               key={index}
               index={index}
               beatsPerMeasure={beatsPerMeasure}
               totalDuration={totalDuration}
-              notes={notes}
+              noteBlocks={noteBlocks}
               showAddButton={
                 this.state.measures.length < MAX_MEASURES &&
                 index === this.state.measures.length - 1
               }
               showRemoveButton={this.state.measures.length > 1}
-              onDropNote={this.onMeasureDropNote}
-              onNoteRemove={this.onNoteRemove}
+              onDropNoteBlock={this.onMeasureDropNoteBlock}
+              onNoteBlockRemove={this.onNoteBlockRemove}
               onMeasureAdd={this.onMeasureAdd}
               onMeasureRemove={this.onMeasureRemove}
             />
           ))}
         </section>
         <section className={styles.palette}>
-          <NotePalette className={styles.palette} paletteNotes={this.state.paletteNotes} />
+          <NoteBlockPalette
+            className={styles.palette}
+            paletteNoteBlocks={this.state.paletteNoteBlocks}
+          />
         </section>
       </div>
     );

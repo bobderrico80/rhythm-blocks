@@ -1,4 +1,4 @@
-.note {
+.note-block {
   box-sizing: border-box;
   border: 5px solid black;
   border-radius: 5px;
@@ -9,7 +9,7 @@
   padding: 0 0.5rem;
 }
 
-.note > img {
+.note-block > img {
   height: 80%;
   width: auto;
 }
