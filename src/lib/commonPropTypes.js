@@ -8,4 +8,13 @@ export const noteBlock = {
   alt: PropTypes.string.isRequired,
   css: PropTypes.string.isRequired,
   duration: PropTypes.number.isRequired,
+  pattern: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        note: PropTypes.string.isRequired,
+        isRest: PropTypes.bool.isRequired,
+      }),
+    ]),
+  ).isRequired,
 };

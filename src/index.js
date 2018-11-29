@@ -4,6 +4,10 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+if (process.env.NODE_ENV !== 'production') {
+  localStorage.setItem('debug', 'rhythm-blocks:*');
+}
+
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

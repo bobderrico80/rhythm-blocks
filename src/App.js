@@ -97,6 +97,9 @@ class App extends Component {
   render() {
     return (
       <div className={styles.app}>
+        <section>
+          <Player measures={this.state.measures} />
+        </section>
         <section className={styles.canvas}>
           {this.state.measures.map(({ noteBlocks, totalDuration, beatsPerMeasure }, index) => (
             <Measure
