@@ -87,7 +87,7 @@ class Composer extends Component {
 
   render() {
     return (
-      <div className={styles.composer}>
+      <main className={styles.composer}>
         <section>
           <Player measures={this.state.measures} />
         </section>
@@ -117,7 +117,7 @@ class Composer extends Component {
             paletteNoteBlocks={this.state.paletteNoteBlocks}
           />
         </section>
-      </div>
+      </main>
     );
   }
 }

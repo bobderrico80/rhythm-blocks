@@ -1,0 +1,12 @@
+.modal {
+  max-width: 400px;
+  margin: 3rem auto 0 auto;
+  padding: 1rem 2rem 3rem 2rem;
+  background-color: white;
+  border: 5px solid black;
+  border-radius: 5px;
+}
+
+.close {
+  float: right;
+}
