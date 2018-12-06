@@ -16,18 +16,13 @@ const defaultProps = {
 };
 
 class Player extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onPlayClick = this.onPlayClick.bind(this);
-  }
-
-  onPlayClick() {
+  onPlayClick = () => {
     if (!this.props.measures.length || !this.props.measures[0].noteBlocks.length) {
       return;
     }
 
     startPlayback();
-  }
+  };
 
   scheduleMeasures() {
     scheduleMeasures(this.props.measures);

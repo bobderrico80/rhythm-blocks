@@ -13,35 +13,46 @@ const BEATS_PER_MEASURE = 4;
 const MAX_MEASURES = 4;
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      paletteNoteBlocks: createNoteBlocks(
-        [
-          noteBlockTypes.WHOLE_NOTE,
-          noteBlockTypes.HALF_NOTE,
-          noteBlockTypes.QUARTER_NOTE,
-          noteBlockTypes.DOUBLE_8TH_NOTES,
-          noteBlockTypes.QUARTER_NOTE_REST,
-        ],
-        noteBlock => `palette-${noteBlock.type.description}`,
-      ),
-      measures: createMeasures(BEATS_PER_MEASURE),
-    };
-
-    this.onMeasureDropNoteBlock = this.onMeasureDropNoteBlock.bind(this);
-    this.onNoteBlockRemove = this.onNoteBlockRemove.bind(this);
-    this.onMeasureAdd = this.onMeasureAdd.bind(this);
-    this.onMeasureRemove = this.onMeasureRemove.bind(this);
-  }
-
   static calculateTotalDuration(measureNoteBlocks) {
     return measureNoteBlocks.reduce(
       (totalDuration, noteBlock) => (totalDuration += noteBlock.duration),
       0,
     );
   }
+
+  state = {
+    paletteNoteBlocks: createNoteBlocks(
+      [
+        noteBlockTypes.WHOLE_NOTE,
+        noteBlockTypes.HALF_NOTE,
+        noteBlockTypes.QUARTER_NOTE,
+        noteBlockTypes.DOUBLE_8TH_NOTES,
+        noteBlockTypes.QUARTER_NOTE_REST,
+      ],
+      noteBlock => `palette-${noteBlock.type.description}`,
+    ),
+    measures: createMeasures(BEATS_PER_MEASURE),
+  };
+
+  onMeasureDropNoteBlock = ({ measureIndex, noteBlockType }) => {
+    this.addNoteBlockToMeasure(measureIndex, noteBlockType);
+  };
+
+  onNoteBlockRemove = (measureIndex, noteBlockId) => {
+    this.removeNoteBlockFromMeasure(measureIndex, noteBlockId);
+  };
+
+  onMeasureAdd = () => {
+    this.setState(({ measures }) => ({
+      measures: measures.concat(createMeasures(BEATS_PER_MEASURE)),
+    }));
+  };
+
+  onMeasureRemove = measureIndex => {
+    this.setState(({ measures }) => ({
+      measures: [...measures.slice(0, measureIndex), ...measures.slice(measureIndex + 1)],
+    }));
+  };
 
   updateMeasure(measureIndex, updateMeasureNoteBlockFunction) {
     this.setState(({ measures }) => {
@@ -72,26 +83,6 @@ class App extends Component {
     this.updateMeasure(measureIndex, previousMeasureNoteBlocks =>
       previousMeasureNoteBlocks.filter(noteBlock => noteBlock.id !== noteBlockId),
     );
-  }
-
-  onMeasureDropNoteBlock({ measureIndex, noteBlockType }) {
-    this.addNoteBlockToMeasure(measureIndex, noteBlockType);
-  }
-
-  onNoteBlockRemove(measureIndex, noteBlockId) {
-    this.removeNoteBlockFromMeasure(measureIndex, noteBlockId);
-  }
-
-  onMeasureAdd() {
-    this.setState(({ measures }) => ({
-      measures: measures.concat(createMeasures(BEATS_PER_MEASURE)),
-    }));
-  }
-
-  onMeasureRemove(measureIndex) {
-    this.setState(({ measures }) => ({
-      measures: [...measures.slice(0, measureIndex), ...measures.slice(measureIndex + 1)],
-    }));
   }
 
   render() {
