@@ -60,8 +60,6 @@ class Player extends React.Component {
   }
 
   renderButtonContents() {
-    console.log('styles', typeof styles, styles);
-
     if (this.props.playbackState === playbackStates.PLAYING) {
       return (
         <React.Fragment>

@@ -8,7 +8,9 @@ const propTypes = {
 
 const Header = ({ onAboutButtonClick }) => (
   <header className={styles.header}>
-    <h1 className={styles.banner}>Rhythm Blocks</h1>
+    <h1 className={styles.banner}>
+      Rhythm Blocks <small className={styles.versionText}>Alpha</small>
+    </h1>
     <nav className={styles.nav}>
       <ul className={styles.navList}>
         <li className={styles.navItem}>

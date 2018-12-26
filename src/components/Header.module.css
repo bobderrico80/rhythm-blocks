@@ -12,6 +12,11 @@
   margin: 0 1rem 0 0;
 }
 
+.versionText {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
 .navList {
   display: flex;
   margin: 0px;
