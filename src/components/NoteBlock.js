@@ -8,6 +8,7 @@ import styles from './NoteBlock.module.css';
 const propTypes = {
   className: PropTypes.string,
   isPaletteNoteBlock: PropTypes.bool,
+  isComposerPlaying: PropTypes.bool.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   measureIndex: PropTypes.number,
   onNoteBlockRemove: PropTypes.func,
@@ -38,6 +39,8 @@ const dragSpec = {
       noteBlockDuration: props.duration,
     };
   },
+
+  canDrag: props => !props.isComposerPlaying,
 
   endDrag: ({ isPaletteNoteBlock, measureIndex, id, onNoteBlockRemove }, monitor) => {
     if (onNoteBlockRemove && !isPaletteNoteBlock) {

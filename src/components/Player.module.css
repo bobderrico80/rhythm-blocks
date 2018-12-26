@@ -1,0 +1,22 @@
+.playButton {
+  display: flex;
+  align-items: center;
+  background: none;
+  font-size: 1rem;
+  min-width: 80px;
+  padding: 0.5rem;
+  margin: 0;
+  border: 2px solid black;
+}
+
+.playIcon {
+  width: 1rem;
+  margin-right: 0.5rem;
+  height: auto;
+}
+
+.stopIcon {
+  width: 1rem;
+  margin-right: 0.5rem;
+  height: auto;
+}

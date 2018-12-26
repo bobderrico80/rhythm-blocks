@@ -6,7 +6,7 @@ import NoteBlockPalette from './NoteBlockPalette';
 import Player from './Player';
 import createMeasures from '../lib/createMeasures';
 import createNoteBlocks from '../lib/createNoteBlocks';
-import { noteBlockTypes } from '../lib/constants';
+import { noteBlockTypes, playbackStates } from '../lib/constants';
 import styles from './Composer.module.css';
 
 const BEATS_PER_MEASURE = 4;
@@ -32,6 +32,7 @@ class Composer extends Component {
       noteBlock => `palette-${noteBlock.type.description}`,
     ),
     measures: createMeasures(BEATS_PER_MEASURE),
+    playbackState: playbackStates.STOPPED,
   };
 
   onMeasureDropNoteBlock = ({ measureIndex, noteBlockType }) => {
@@ -52,6 +53,10 @@ class Composer extends Component {
     this.setState(({ measures }) => ({
       measures: [...measures.slice(0, measureIndex), ...measures.slice(measureIndex + 1)],
     }));
+  };
+
+  onPlaybackStateChange = nextPlaybackState => {
+    this.setState({ playbackState: nextPlaybackState });
   };
 
   updateMeasure(measureIndex, updateMeasureNoteBlockFunction) {
@@ -85,11 +90,19 @@ class Composer extends Component {
     );
   }
 
+  isPlaying() {
+    return this.state.playbackState === playbackStates.PLAYING;
+  }
+
   render() {
     return (
       <main className={styles.composer}>
-        <section>
-          <Player measures={this.state.measures} />
+        <section className={styles.toolbar}>
+          <Player
+            measures={this.state.measures}
+            playbackState={this.state.playbackState}
+            onPlaybackStateChange={this.onPlaybackStateChange}
+          />
         </section>
         <section className={styles.canvas}>
           {this.state.measures.map(({ noteBlocks, totalDuration, beatsPerMeasure }, index) => (
@@ -104,6 +117,7 @@ class Composer extends Component {
                 index === this.state.measures.length - 1
               }
               showRemoveButton={this.state.measures.length > 1}
+              isComposerPlaying={this.isPlaying()}
               onDropNoteBlock={this.onMeasureDropNoteBlock}
               onNoteBlockRemove={this.onNoteBlockRemove}
               onMeasureAdd={this.onMeasureAdd}
@@ -115,6 +129,7 @@ class Composer extends Component {
           <NoteBlockPalette
             className={styles.palette}
             paletteNoteBlocks={this.state.paletteNoteBlocks}
+            isComposerPlaying={this.isPlaying()}
           />
         </section>
       </main>

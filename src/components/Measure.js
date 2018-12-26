@@ -16,6 +16,7 @@ const propTypes = {
   connectDropTarget: PropTypes.func.isRequired,
   showAddButton: PropTypes.bool,
   showRemoveButton: PropTypes.bool,
+  isComposerPlaying: PropTypes.bool.isRequired,
   onDropNoteBlock: PropTypes.func.isRequired,
   onNoteBlockRemove: PropTypes.func.isRequired,
   onMeasureAdd: PropTypes.func.isRequired,
@@ -35,6 +36,7 @@ const Measure = ({
   connectDropTarget,
   showAddButton,
   showRemoveButton,
+  isComposerPlaying,
   onNoteBlockRemove,
   onMeasureAdd,
   onMeasureRemove,
@@ -47,6 +49,7 @@ const Measure = ({
             key={noteBlock.id}
             index={noteIndex}
             measureIndex={index}
+            isComposerPlaying={isComposerPlaying}
             onNoteBlockRemove={onNoteBlockRemove}
             {...noteBlock}
           />

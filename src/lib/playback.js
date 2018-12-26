@@ -1,10 +1,12 @@
-import Tone, { Transport } from 'tone';
+import Tone from 'tone';
 import logger from './logger';
 
 const synth = new Tone.Synth().toMaster();
 const NOTE_PITCH = 'F4';
 const NOTE_SPACING = '16n';
 const TRAILING_TIME_SECONDS = 1;
+
+export const Transport = Tone.Transport;
 
 Transport.on('start', () => {
   logger.debug('start');
@@ -70,4 +72,8 @@ export const scheduleMeasures = measures => {
 
 export const startPlayback = () => {
   Transport.start();
+};
+
+export const stopPlayback = () => {
+  Transport.stop();
 };

@@ -10,3 +10,8 @@ export const noteBlockTypes = {
   DOUBLE_8TH_NOTES: Symbol('DOUBLE_8TH_NOTES'),
   QUARTER_NOTE_REST: Symbol('QUARTER_NOTE_REST'),
 };
+
+export const playbackStates = {
+  STOPPED: Symbol('STOPPED'),
+  PLAYING: Symbol('PLAYING'),
+};

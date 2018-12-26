@@ -6,13 +6,14 @@ import { noteBlock } from '../lib/commonPropTypes';
 
 const propTypes = {
   paletteNoteBlocks: PropTypes.arrayOf(PropTypes.shape(noteBlock)).isRequired,
+  isComposerPlaying: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
   className: '',
 };
 
-const NoteBlockPalette = ({ paletteNoteBlocks }) => {
+const NoteBlockPalette = ({ paletteNoteBlocks, isComposerPlaying }) => {
   return (
     <div className={styles.notePalette}>
       {paletteNoteBlocks.map(noteBlock => {
@@ -22,6 +23,7 @@ const NoteBlockPalette = ({ paletteNoteBlocks }) => {
             key={noteBlock.id}
             {...noteBlock}
             isPaletteNoteBlock={true}
+            isComposerPlaying={isComposerPlaying}
           />
         );
       })}
