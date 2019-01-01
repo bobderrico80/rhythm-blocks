@@ -7,6 +7,7 @@ import Player from './Player';
 import createMeasures from '../lib/createMeasures';
 import createNoteBlocks from '../lib/createNoteBlocks';
 import { noteBlockTypes, playbackStates } from '../lib/constants';
+import isTouchDevice from '../lib/isTouchDevice';
 import styles from './Composer.module.css';
 
 const BEATS_PER_MEASURE = 4;
@@ -95,6 +96,21 @@ class Composer extends Component {
   }
 
   render() {
+    if (isTouchDevice()) {
+      return (
+        <main>
+          Touch devices are not yet supported.{' '}
+          <a
+            href="https://github.com/bobderrico80/rhythm-blocks/milestone/2"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Support is coming soon!
+          </a>
+        </main>
+      );
+    }
+
     return (
       <main className={styles.composer}>
         <section className={styles.toolbar}>

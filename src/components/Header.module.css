@@ -48,3 +48,9 @@
 .navButton:hover {
   font-weight: bold;
 }
+
+@media screen and (max-width: 450px) {
+  .banner {
+    font-size: 1rem;
+  }
+}
