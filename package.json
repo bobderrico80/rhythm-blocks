@@ -1,6 +1,6 @@
 {
   "name": "rhythm-blocks",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
