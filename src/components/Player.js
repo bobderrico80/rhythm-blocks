@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { playbackStates } from '../lib/constants';
 import { noteBlock } from '../lib/commonPropTypes';
-import { scheduleMeasures, startPlayback, stopPlayback, Transport } from '../lib/playback';
+import PlaybackHandler from '../lib/PlaybackHandler';
 import styles from './Player.module.css';
 import play from '../assets/svg/play.svg';
 import stop from '../assets/svg/stop.svg';
@@ -22,28 +22,36 @@ const defaultProps = {
 };
 
 class Player extends React.Component {
+  playbackHandler = new PlaybackHandler();
+
   onPlayClick = () => {
     if (!this.props.measures.length || !this.props.measures[0].noteBlocks.length) {
       return;
     }
 
     if (this.props.playbackState === playbackStates.STOPPED) {
-      startPlayback();
+      this.playbackHandler.startPlayback();
     } else {
-      stopPlayback();
+      this.playbackHandler.stopPlayback();
     }
   };
 
   scheduleMeasures() {
-    scheduleMeasures(this.props.measures);
+    const totalMeasureDuration = this.props.measures.reduce((totalDuration, measure) => {
+      return (totalDuration += measure.totalDuration);
+    }, 0);
+
+    if (totalMeasureDuration > 0) {
+      this.playbackHandler.scheduleMeasures(this.props.measures);
+    }
   }
 
   componentDidMount() {
-    Transport.on('start', () => {
+    this.playbackHandler.Transport.on('start', () => {
       this.props.onPlaybackStateChange(playbackStates.PLAYING);
     });
 
-    Transport.on('stop', () => {
+    this.playbackHandler.Transport.on('stop', () => {
       this.props.onPlaybackStateChange(playbackStates.STOPPED);
     });
 
@@ -55,8 +63,8 @@ class Player extends React.Component {
   }
 
   componentWillUnmount() {
-    Transport.off('start');
-    Transport.off('stop');
+    this.playbackHandler.Transport.off('start');
+    this.playbackHandler.Transport.off('stop');
   }
 
   renderButtonContents() {
