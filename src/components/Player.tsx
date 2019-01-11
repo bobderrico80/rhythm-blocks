@@ -1,27 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { playbackStates } from '../lib/constants';
-import { noteBlock } from '../lib/commonPropTypes';
-import PlaybackHandler from '../lib/PlaybackHandler';
+import PlaybackHandler, { PlaybackState } from '../lib/PlaybackHandler';
 import styles from './Player.module.css';
 import play from '../assets/svg/play.svg';
 import stop from '../assets/svg/stop.svg';
+import { MeasureDefinition } from '../lib/createMeasureDefinitions';
 
-const propTypes = {
-  measures: PropTypes.arrayOf(
-    PropTypes.shape({
-      noteBlocks: PropTypes.arrayOf(PropTypes.shape(noteBlock)),
-    }),
-  ),
-  playbackState: PropTypes.oneOf(Object.values(playbackStates)).isRequired,
-  onPlaybackStateChange: PropTypes.func.isRequired,
-};
+interface PlayerProps {
+  measures: MeasureDefinition[];
+  playbackState: PlaybackState;
+  onPlaybackStateChange: (playbackState: PlaybackState) => void;
+}
 
-const defaultProps = {
-  measures: [],
-};
+class Player extends React.Component<PlayerProps> {
+  static defaultProps = {
+    measures: [],
+  };
 
-class Player extends React.Component {
   playbackHandler = new PlaybackHandler();
 
   onPlayClick = () => {
@@ -29,7 +24,7 @@ class Player extends React.Component {
       return;
     }
 
-    if (this.props.playbackState === playbackStates.STOPPED) {
+    if (this.props.playbackState === PlaybackState.STOPPED) {
       this.playbackHandler.startPlayback();
     } else {
       this.playbackHandler.stopPlayback();
@@ -48,11 +43,11 @@ class Player extends React.Component {
 
   componentDidMount() {
     this.playbackHandler.Transport.on('start', () => {
-      this.props.onPlaybackStateChange(playbackStates.PLAYING);
+      this.props.onPlaybackStateChange(PlaybackState.PLAYING);
     });
 
     this.playbackHandler.Transport.on('stop', () => {
-      this.props.onPlaybackStateChange(playbackStates.STOPPED);
+      this.props.onPlaybackStateChange(PlaybackState.STOPPED);
     });
 
     this.scheduleMeasures();
@@ -68,7 +63,7 @@ class Player extends React.Component {
   }
 
   renderButtonContents() {
-    if (this.props.playbackState === playbackStates.PLAYING) {
+    if (this.props.playbackState === PlaybackState.PLAYING) {
       return (
         <React.Fragment>
           <img src={stop} alt="Stop" className={styles.stopIcon} />
@@ -92,8 +87,5 @@ class Player extends React.Component {
     );
   }
 }
-
-Player.propTypes = propTypes;
-Player.defaultProps = defaultProps;
 
 export default Player;

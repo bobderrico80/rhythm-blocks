@@ -1,19 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import NoteBlock from './NoteBlock';
 import styles from './NoteBlockPalette.module.css';
-import { noteBlock } from '../lib/commonPropTypes';
+import { NoteBlockDefinition } from '../lib/noteBlockDefinitions';
 
-const propTypes = {
-  paletteNoteBlocks: PropTypes.arrayOf(PropTypes.shape(noteBlock)).isRequired,
-  isComposerPlaying: PropTypes.bool.isRequired,
-};
+interface NoteBlockPaletteProps {
+  paletteNoteBlocks: NoteBlockDefinition[];
+  isComposerPlaying: boolean;
+}
 
-const defaultProps = {
-  className: '',
-};
-
-const NoteBlockPalette = ({ paletteNoteBlocks, isComposerPlaying }) => {
+const NoteBlockPalette = ({ paletteNoteBlocks, isComposerPlaying }: NoteBlockPaletteProps) => {
   return (
     <div className={styles.notePalette}>
       {paletteNoteBlocks.map(noteBlock => {
@@ -21,7 +16,7 @@ const NoteBlockPalette = ({ paletteNoteBlocks, isComposerPlaying }) => {
           <NoteBlock
             className={styles.notePaletteNoteBlock}
             key={noteBlock.id}
-            {...noteBlock}
+            noteBlockDefinition={noteBlock}
             isPaletteNoteBlock={true}
             isComposerPlaying={isComposerPlaying}
           />
@@ -30,8 +25,5 @@ const NoteBlockPalette = ({ paletteNoteBlocks, isComposerPlaying }) => {
     </div>
   );
 };
-
-NoteBlockPalette.propTypes = propTypes;
-NoteBlockPalette.defaultProps = defaultProps;
 
 export default NoteBlockPalette;

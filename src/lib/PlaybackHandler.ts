@@ -1,5 +1,14 @@
-import Tone from 'tone';
+import Tone, { Master } from 'tone';
 import logger from './logger';
+import { MeasureDefinition } from './createMeasureDefinitions';
+
+// @ts-ignore
+window.Tone = Tone;
+
+export enum PlaybackState {
+  STOPPED = 'STOPPED',
+  PLAYING = 'PLAYING',
+}
 
 const NOTE_PITCH = 'F4';
 const NOTE_SPACING = '16n';
@@ -7,7 +16,7 @@ const TRAILING_TIME_SECONDS = 1;
 
 class PlaybackHander {
   initialized = false;
-  synth = null;
+  synth: Master | null = null;
   Transport = Tone.Transport;
 
   init() {
@@ -34,22 +43,24 @@ class PlaybackHander {
     this.Transport.stop();
   }
 
-  triggerNote(duration) {
-    if (!this.initialized) {
-      this.init();
-    }
+  triggerNote(duration: string) {
+    return (time: number) => {
+      if (this.synth) {
+        logger.debug(`triggering ${duration} at ${time}`);
 
-    return time => {
-      logger.debug(`triggering ${duration} at ${time}`);
-      this.synth.triggerAttackRelease(
-        NOTE_PITCH,
-        Tone.Time(duration) - Tone.Time(NOTE_SPACING),
-        time,
-      );
+        this.synth.triggerAttackRelease(
+          NOTE_PITCH,
+          Tone.Time(duration).valueOf() - Tone.Time(NOTE_SPACING).valueOf(),
+          time,
+        );
+      } else {
+        this.init();
+        this.triggerNote(duration);
+      }
     };
   }
 
-  scheduleMeasures(measures) {
+  scheduleMeasures(measures: MeasureDefinition[]) {
     if (!this.initialized) {
       this.init();
     }
@@ -63,7 +74,7 @@ class PlaybackHander {
     }
 
     measures.forEach(measure => {
-      if (measure.length === 0) {
+      if (measure.totalDuration === 0) {
         return;
       }
 
@@ -73,15 +84,7 @@ class PlaybackHander {
         }
 
         noteBlock.pattern.forEach(note => {
-          let noteToSchedule;
-          let isRest = false;
-
-          if (typeof note === 'string') {
-            noteToSchedule = note;
-          } else {
-            noteToSchedule = note.note;
-            isRest = note.isRest;
-          }
+          const { note: noteToSchedule, isRest } = note;
 
           logger.debug(
             `scheduling ${isRest ? 'rest' : 'note'} ${noteToSchedule} at ${elapsedTime}`,

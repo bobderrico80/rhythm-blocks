@@ -1,21 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import styles from './AboutModal.module.css';
 import { version } from '../../package.json';
 
-const propTypes = {
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-};
-
-const defaultProps = {
-  isOpen: false,
-};
+export interface AboutModalProps {
+  isOpen: boolean;
+  onClose: (event: any) => void;
+}
 
 Modal.setAppElement('#root');
 
-const AboutModal = ({ isOpen, onClose }) => {
+const AboutModal = ({ isOpen, onClose }: AboutModalProps) => {
   return (
     <Modal
       contentLabel="About Rhythm Blocks"
@@ -65,8 +60,5 @@ const AboutModal = ({ isOpen, onClose }) => {
     </Modal>
   );
 };
-
-AboutModal.propTypes = propTypes;
-AboutModal.defaultProps = defaultProps;
 
 export default AboutModal;

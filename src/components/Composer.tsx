@@ -4,64 +4,84 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import Measure from './Measure';
 import NoteBlockPalette from './NoteBlockPalette';
 import Player from './Player';
-import createMeasures from '../lib/createMeasures';
-import createNoteBlocks from '../lib/createNoteBlocks';
-import { noteBlockTypes, playbackStates } from '../lib/constants';
+import createMeasureDefinitions, { MeasureDefinition } from '../lib/createMeasureDefinitions';
+import createNoteBlockDefinitions from '../lib/createNoteBlockDefinitions';
 import isTouchDevice from '../lib/isTouchDevice';
 import styles from './Composer.module.css';
+import { NoteBlockDefinition, NoteBlockType } from '../lib/noteBlockDefinitions';
+import { PlaybackState } from '../lib/PlaybackHandler';
 
 const BEATS_PER_MEASURE = 4;
 const MAX_MEASURES = 4;
 
+interface ComposerState {
+  paletteNoteBlocks: NoteBlockDefinition[];
+  measures: MeasureDefinition[];
+  playbackState: PlaybackState;
+}
+
 class Composer extends Component {
-  static calculateTotalDuration(measureNoteBlocks) {
+  static calculateTotalDuration(measureNoteBlocks: NoteBlockDefinition[]) {
     return measureNoteBlocks.reduce(
       (totalDuration, noteBlock) => (totalDuration += noteBlock.duration),
       0,
     );
   }
 
-  state = {
-    paletteNoteBlocks: createNoteBlocks(
+  state: ComposerState = {
+    paletteNoteBlocks: createNoteBlockDefinitions(
       [
-        noteBlockTypes.WHOLE_NOTE,
-        noteBlockTypes.HALF_NOTE,
-        noteBlockTypes.QUARTER_NOTE,
-        noteBlockTypes.DOUBLE_8TH_NOTES,
-        noteBlockTypes.QUARTER_NOTE_REST,
+        NoteBlockType.WHOLE_NOTE,
+        NoteBlockType.HALF_NOTE,
+        NoteBlockType.QUARTER_NOTE,
+        NoteBlockType.DOUBLE_8TH_NOTES,
+        NoteBlockType.QUARTER_NOTE_REST,
       ],
-      noteBlock => `palette-${noteBlock.type.description}`,
+      noteBlock => `palette-${noteBlock.type}`,
     ),
-    measures: createMeasures(BEATS_PER_MEASURE),
-    playbackState: playbackStates.STOPPED,
+    measures: createMeasureDefinitions(BEATS_PER_MEASURE),
+    playbackState: PlaybackState.STOPPED,
   };
 
-  onMeasureDropNoteBlock = ({ measureIndex, noteBlockType }) => {
+  onMeasureDropNoteBlock = ({
+    measureIndex,
+    noteBlockType,
+  }: {
+    measureIndex: number;
+    noteBlockType: NoteBlockType;
+  }) => {
     this.addNoteBlockToMeasure(measureIndex, noteBlockType);
   };
 
-  onNoteBlockRemove = (measureIndex, noteBlockId) => {
+  onNoteBlockRemove = (measureIndex: number, noteBlockId?: string) => {
     this.removeNoteBlockFromMeasure(measureIndex, noteBlockId);
   };
 
   onMeasureAdd = () => {
-    this.setState(({ measures }) => ({
-      measures: measures.concat(createMeasures(BEATS_PER_MEASURE)),
+    this.setState(({ measures }: { measures: MeasureDefinition[] }) => ({
+      // TODO: Measure type
+      measures: measures.concat(createMeasureDefinitions(BEATS_PER_MEASURE)),
     }));
   };
 
-  onMeasureRemove = measureIndex => {
-    this.setState(({ measures }) => ({
+  onMeasureRemove = (measureIndex: number) => {
+    this.setState(({ measures }: { measures: MeasureDefinition[] }) => ({
+      // TODO: Measure type
       measures: [...measures.slice(0, measureIndex), ...measures.slice(measureIndex + 1)],
     }));
   };
 
-  onPlaybackStateChange = nextPlaybackState => {
+  onPlaybackStateChange = (nextPlaybackState: PlaybackState) => {
     this.setState({ playbackState: nextPlaybackState });
   };
 
-  updateMeasure(measureIndex, updateMeasureNoteBlockFunction) {
-    this.setState(({ measures }) => {
+  updateMeasure(
+    measureIndex: number,
+    updateMeasureNoteBlockFunction: (
+      previousNoteBlocks: NoteBlockDefinition[],
+    ) => NoteBlockDefinition[],
+  ) {
+    this.setState(({ measures }: { measures: MeasureDefinition[] }) => {
       const previousMeasure = measures[measureIndex];
       const updatedMeasures = [...measures];
       const updatedMeasureNoteBlocks = updateMeasureNoteBlockFunction(previousMeasure.noteBlocks);
@@ -76,8 +96,8 @@ class Composer extends Component {
     });
   }
 
-  addNoteBlockToMeasure(measureIndex, noteBlockType) {
-    const newNoteBlock = createNoteBlocks(noteBlockType);
+  addNoteBlockToMeasure(measureIndex: number, noteBlockType: NoteBlockType) {
+    const newNoteBlock = createNoteBlockDefinitions(noteBlockType);
 
     this.updateMeasure(measureIndex, previousMeasureNoteBlocks => [
       ...previousMeasureNoteBlocks,
@@ -85,14 +105,14 @@ class Composer extends Component {
     ]);
   }
 
-  removeNoteBlockFromMeasure(measureIndex, noteBlockId) {
+  removeNoteBlockFromMeasure(measureIndex: number, noteBlockId?: string) {
     this.updateMeasure(measureIndex, previousMeasureNoteBlocks =>
       previousMeasureNoteBlocks.filter(noteBlock => noteBlock.id !== noteBlockId),
     );
   }
 
   isPlaying() {
-    return this.state.playbackState === playbackStates.PLAYING;
+    return this.state.playbackState === PlaybackState.PLAYING;
   }
 
   render() {
@@ -143,7 +163,6 @@ class Composer extends Component {
         </section>
         <section className={styles.palette}>
           <NoteBlockPalette
-            className={styles.palette}
             paletteNoteBlocks={this.state.paletteNoteBlocks}
             isComposerPlaying={this.isPlaying()}
           />

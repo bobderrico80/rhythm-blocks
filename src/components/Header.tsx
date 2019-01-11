@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import styles from './Header.module.css';
 import icon from '../assets/svg/rb-icon.svg';
 
-const propTypes = {
-  onAboutButtonClick: PropTypes.func.isRequired,
-};
+export interface HeaderProps {
+  onAboutButtonClick: (event: any) => void;
+}
 
-const Header = ({ onAboutButtonClick }) => (
+const Header = ({ onAboutButtonClick }: HeaderProps) => (
   <header className={styles.header}>
     <h1 className={styles.banner}>
       <img src={icon} alt="" />
@@ -25,7 +25,5 @@ const Header = ({ onAboutButtonClick }) => (
     </nav>
   </header>
 );
-
-Header.propTypes = propTypes;
 
 export default Header;

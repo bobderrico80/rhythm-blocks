@@ -1,30 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
-import NoteBlock from './NoteBlock';
-import { noteBlock } from '../lib/commonPropTypes';
-import { dropTypes } from '../lib/constants';
+import { DropTarget, ConnectDropTarget, DropTargetMonitor, DropTargetConnector } from 'react-dnd';
+import NoteBlock, { OnNoteBlockRemoveFunction, DropType } from './NoteBlock';
 import plus from '../assets/svg/plus.svg';
 import close from '../assets/svg/close.svg';
 import styles from './Measure.module.css';
+import { NoteBlockDefinition, NoteBlockType } from '../lib/noteBlockDefinitions';
 
-const propTypes = {
-  index: PropTypes.number.isRequired,
-  beatsPerMeasure: PropTypes.number.isRequired,
-  totalDuration: PropTypes.number.isRequired,
-  noteBlocks: PropTypes.arrayOf(PropTypes.shape(noteBlock)),
-  connectDropTarget: PropTypes.func.isRequired,
-  showAddButton: PropTypes.bool,
-  showRemoveButton: PropTypes.bool,
-  isComposerPlaying: PropTypes.bool.isRequired,
-  onDropNoteBlock: PropTypes.func.isRequired,
-  onNoteBlockRemove: PropTypes.func.isRequired,
-  onMeasureAdd: PropTypes.func.isRequired,
-  onMeasureRemove: PropTypes.func.isRequired,
-};
+interface MeasureProps {
+  index: number;
+  beatsPerMeasure: number;
+  totalDuration?: number;
+  noteBlocks: NoteBlockDefinition[];
+  connectDropTarget: ConnectDropTarget;
+  showAddButton?: boolean;
+  showRemoveButton?: boolean;
+  isComposerPlaying: boolean;
+  onDropNoteBlock: (
+    { measureIndex, noteBlockType }: { measureIndex: number; noteBlockType: NoteBlockType },
+  ) => void;
+  onNoteBlockRemove: OnNoteBlockRemoveFunction;
+  onMeasureAdd: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  onMeasureRemove: (measureIndex: number) => void;
+}
 
 const defaultProps = {
-  notes: [],
   totalDuration: 0,
   showAddButton: false,
   showRemoveButton: false,
@@ -40,7 +39,7 @@ const Measure = ({
   onNoteBlockRemove,
   onMeasureAdd,
   onMeasureRemove,
-}) => {
+}: MeasureProps) => {
   return connectDropTarget(
     <div className={styles.measureWrap}>
       <div className={styles.measure}>
@@ -51,7 +50,7 @@ const Measure = ({
             measureIndex={index}
             isComposerPlaying={isComposerPlaying}
             onNoteBlockRemove={onNoteBlockRemove}
-            {...noteBlock}
+            noteBlockDefinition={noteBlock}
           />
         ))}
       </div>
@@ -69,11 +68,13 @@ const Measure = ({
   );
 };
 
-Measure.propTypes = propTypes;
 Measure.defaultProps = defaultProps;
 
 const dropSpec = {
-  drop: ({ index, onDropNoteBlock, totalDuration, beatsPerMeasure }, monitor) => {
+  drop: (
+    { index, onDropNoteBlock, totalDuration, beatsPerMeasure }: MeasureProps,
+    monitor: DropTargetMonitor,
+  ) => {
     const { noteBlockType, noteBlockDuration } = monitor.getItem();
 
     // Cancel drop if measure is full or will be full
@@ -88,14 +89,14 @@ const dropSpec = {
   },
 };
 
-const dropCollect = connect => {
+const dropCollect = (connect: DropTargetConnector) => {
   return {
     connectDropTarget: connect.dropTarget(),
   };
 };
 
 export default DropTarget(
-  [dropTypes.NOTE_BLOCK, dropTypes.PALETTE_NOTE_BLOCK],
+  [DropType.NOTE_BLOCK, DropType.PALETTE_NOTE_BLOCK],
   dropSpec,
   dropCollect,
 )(Measure);
