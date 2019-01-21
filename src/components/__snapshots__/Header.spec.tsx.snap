@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The <Header /> component renders as expected 1`] = `
+<header
+  className="header"
+>
+  <h1
+    className="banner"
+  >
+    <img
+      alt=""
+      src="rb-icon.svg"
+    />
+    Rhythm Blocks
+    <small
+      className="versionText"
+    >
+      Alpha
+    </small>
+  </h1>
+  <nav
+    className="nav"
+  >
+    <ul
+      className="navList"
+    >
+      <li
+        className="navItem"
+      >
+        <button
+          className="navButton"
+          onClick={[MockFunction]}
+        >
+          About
+        </button>
+      </li>
+    </ul>
+  </nav>
+</header>
+`;
