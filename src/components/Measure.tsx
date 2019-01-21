@@ -1,8 +1,8 @@
 import React from 'react';
 import { DropTarget, ConnectDropTarget, DropTargetMonitor, DropTargetConnector } from 'react-dnd';
 import NoteBlock, { OnNoteBlockRemoveFunction, DropType } from './NoteBlock';
-import plus from '../assets/svg/plus.svg';
-import close from '../assets/svg/close.svg';
+import plus from '../assets/svg/ui/plus.svg';
+import close from '../assets/svg/ui/close.svg';
 import styles from './Measure.module.css';
 import { NoteBlockDefinition, NoteBlockType } from '../lib/noteBlockDefinitions';
 

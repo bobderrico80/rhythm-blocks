@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PlaybackHandler, { PlaybackState } from '../lib/PlaybackHandler';
 import styles from './Player.module.css';
-import play from '../assets/svg/play.svg';
-import stop from '../assets/svg/stop.svg';
+import play from '../assets/svg/player/play.svg';
+import stop from '../assets/svg/player/stop.svg';
 import { MeasureDefinition } from '../lib/createMeasureDefinitions';
 
 interface PlayerProps {

@@ -1,45 +1,55 @@
-.note-block {
+.noteBlock {
   box-sizing: border-box;
   border: 5px solid black;
   border-radius: 5px;
   height: 8rem;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   flex-shrink: 0;
-  padding: 0 0.5rem;
+  padding: 1rem;
 }
 
-.note-block > img {
-  height: 80%;
+.noteBlock > img {
+  height: 100%;
   width: auto;
 }
 
-.whole-note {
+.wholeNote {
   width: 32rem;
   background-color: #7e8af1;
 }
 
-.whole-note > img {
-  height: 40%;
-  margin-left: 2rem;
+.wholeNote > img {
+  height: 25%;
 }
 
-.half-note {
+.halfNote {
   width: 16rem;
   background-color: #8dc063;
 }
 
-.quarter-note {
+.quarterNote {
   width: 8rem;
   background-color: #f17e7e;
 }
 
-.quaver {
+.twoBeamed8thNotes {
   width: 8rem;
   background-color: #f0ee8c;
 }
 
-.quarter-note-rest {
+.fourBeamed16thNotes {
+  width: 8rem;
+  background-color: #e99b51;
+}
+
+.fourBeamed16thNotes img {
+  height: auto;
+  width: 100%;
+}
+
+.quarterRest {
   width: 8rem;
   background-color: #b464ff;
+  justify-content: center;
 }

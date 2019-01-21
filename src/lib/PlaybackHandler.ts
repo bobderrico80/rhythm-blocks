@@ -2,16 +2,13 @@ import Tone, { Master } from 'tone';
 import logger from './logger';
 import { MeasureDefinition } from './createMeasureDefinitions';
 
-// @ts-ignore
-window.Tone = Tone;
-
 export enum PlaybackState {
   STOPPED = 'STOPPED',
   PLAYING = 'PLAYING',
 }
 
 const NOTE_PITCH = 'F4';
-const NOTE_SPACING = '16n';
+const NOTE_SPACING = 0.85;
 const TRAILING_TIME_SECONDS = 1;
 
 class PlaybackHander {
@@ -50,7 +47,7 @@ class PlaybackHander {
 
         this.synth.triggerAttackRelease(
           NOTE_PITCH,
-          Tone.Time(duration).valueOf() - Tone.Time(NOTE_SPACING).valueOf(),
+          Tone.Time(duration).valueOf() * NOTE_SPACING,
           time,
         );
       } else {

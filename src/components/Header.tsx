@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Header.module.css';
-import icon from '../assets/svg/rb-icon.svg';
+import icon from '../assets/svg/ui/rb-icon.svg';
 
 export interface HeaderProps {
   onAboutButtonClick: (event: any) => void;

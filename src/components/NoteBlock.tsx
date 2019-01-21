@@ -28,7 +28,7 @@ const defaultProps = {
 const NoteBlock = ({ className, connectDragSource, noteBlockDefinition }: NoteBlockProps) => {
   const { css, svg, alt } = noteBlockDefinition;
   return connectDragSource(
-    <div className={`${styles['note-block']} ${styles[css]} ${className}`}>
+    <div className={`${styles.noteBlock} ${styles[css]} ${className}`}>
       <img src={svg} alt={alt} />
     </div>,
   );
