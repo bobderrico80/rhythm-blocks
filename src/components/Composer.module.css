@@ -18,6 +18,7 @@
   display: flex;
   flex-flow: wrap;
   justify-content: flex-start;
+  align-content: flex-start;
 }
 
 .palette {

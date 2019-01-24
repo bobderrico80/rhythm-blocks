@@ -1,12 +1,18 @@
+@value noteHeight: 6rem;
+@value noteBorder: calc(noteHeight * 0.05);
+@value threeEighthsNoteHeight: calc(noteHeight * 0.375);
+@value quarterNoteHeight: calc(noteHeight * 0.25);
+@value oneEighthNoteHeight: calc(noteHeight * 0.125);
+
 .noteBlock {
   box-sizing: border-box;
-  border: 5px solid black;
-  border-radius: 5px;
-  height: 8rem;
+  border: noteBorder solid black;
+  border-radius: noteBorder;
+  height: noteHeight;
   display: flex;
   align-items: flex-end;
   flex-shrink: 0;
-  padding: 1rem;
+  padding: oneEighthNoteHeight;
 }
 
 .noteBlock > img {
@@ -15,7 +21,7 @@
 }
 
 .wholeNote {
-  width: 32rem;
+  width: calc(noteHeight * 4);
   background-color: #7e8af1;
 }
 
@@ -24,22 +30,22 @@
 }
 
 .halfNote {
-  width: 16rem;
+  width: calc(noteHeight * 2);
   background-color: #8dc063;
 }
 
 .quarterNote {
-  width: 8rem;
+  width: noteHeight;
   background-color: #f17e7e;
 }
 
 .twoBeamed8thNotes {
-  width: 8rem;
+  width: noteHeight;
   background-color: #f0ee8c;
 }
 
 .fourBeamed16thNotes {
-  width: 8rem;
+  width: noteHeight;
   background-color: #e99b51;
 }
 
@@ -49,7 +55,7 @@
 }
 
 .quarterRest {
-  width: 8rem;
+  width: noteHeight;
   background-color: #b464ff;
   justify-content: center;
 }
