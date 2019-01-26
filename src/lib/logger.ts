@@ -24,7 +24,7 @@ const LOG_LEVEL_COLOR_MAP: { [level: number]: COLOR } = {
 const BASE = 'rhythm-blocks';
 
 class Logger {
-  generateMessage(level: LOG_LEVEL, message: string, source?: string) {
+  private generateMessage(level: LOG_LEVEL, message: string, source?: string) {
     const namespace = `${BASE}:${level}`;
     const createDebug = debug(namespace);
 
