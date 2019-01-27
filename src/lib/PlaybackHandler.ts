@@ -52,7 +52,7 @@ class PlaybackHander {
         );
       } else {
         this.init();
-        this.triggerNote(duration);
+        this.triggerNote(duration)(time);
       }
     };
   }
