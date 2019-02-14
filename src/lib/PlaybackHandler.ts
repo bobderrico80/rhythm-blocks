@@ -2,11 +2,6 @@ import Tone, { Master } from 'tone';
 import logger from './logger';
 import { MeasureDefinition } from './createMeasureDefinitions';
 
-export enum PlaybackState {
-  STOPPED = 'STOPPED',
-  PLAYING = 'PLAYING',
-}
-
 const NOTE_PITCH = 'F4';
 const NOTE_SPACING = 0.85;
 const TRAILING_TIME_SECONDS = 1;

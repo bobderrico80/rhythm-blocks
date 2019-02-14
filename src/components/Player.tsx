@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import PlaybackHandler, { PlaybackState } from '../lib/PlaybackHandler';
+import PlaybackHandler from '../lib/PlaybackHandler';
+import PlaybackState from '../lib/PlaybackState';
 import styles from './Player.module.css';
 import play from '../assets/svg/player/play.svg';
 import stop from '../assets/svg/player/stop.svg';
 import { MeasureDefinition } from '../lib/createMeasureDefinitions';
 
-interface PlayerProps {
+export interface PlayerProps {
   measures: MeasureDefinition[];
   playbackState: PlaybackState;
   onPlaybackStateChange: (playbackState: PlaybackState) => void;

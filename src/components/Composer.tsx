@@ -9,7 +9,7 @@ import createNoteBlockDefinitions from '../lib/createNoteBlockDefinitions';
 import isTouchDevice from '../lib/isTouchDevice';
 import styles from './Composer.module.css';
 import { NoteBlockDefinition, NoteBlockType } from '../lib/noteBlockDefinitions';
-import { PlaybackState } from '../lib/PlaybackHandler';
+import PlaybackState from '../lib/PlaybackState';
 
 const BEATS_PER_MEASURE = 4;
 const MAX_MEASURES = 4;

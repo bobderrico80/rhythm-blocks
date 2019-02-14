@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import renderer from 'react-test-renderer';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { createSnapshot } from '../testUtils';
 import Header from './Header';

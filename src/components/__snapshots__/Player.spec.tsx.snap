@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The <Player /> component during playback renders as expected 1`] = `
+<button
+  className="playButton"
+  onClick={[Function]}
+>
+  <img
+    alt="Stop"
+    className="stopIcon"
+    src="stop.svg"
+  />
+  <span>
+    Stop
+  </span>
+</button>
+`;
+
+exports[`The <Player /> component with default behavior (in STOPPED state) renders as expected 1`] = `
+<button
+  className="playButton"
+  onClick={[Function]}
+>
+  <img
+    alt="Play"
+    className="playIcon"
+    src="play.svg"
+  />
+  <span>
+    Play
+  </span>
+</button>
+`;
